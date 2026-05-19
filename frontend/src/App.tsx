@@ -1,122 +1,77 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
+import { useCallback, useRef } from "react";
+import { useWebSocket } from "./hooks/useWebSocket";
+import { useRPPG } from "./hooks/useRPPG";
+import { WebcamPanel } from "./components/WebcamPanel/WebcamPanel";
+import { WaveformPanel } from "./components/WaveformPanel/WaveformPanel";
+import { Polygon2D } from "./components/Polygon2D/Polygon2D";
+import { Model3D } from "./components/Model3D/Model3D";
+import styles from "./App.module.css";
 
-function App() {
-  const [count, setCount] = useState(0)
+const WS_URL = import.meta.env.VITE_WS_URL ?? "ws://localhost:8000/ws/bpm";
+
+export default function App() {
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const { send, lastMessage, status: wsStatus } = useWebSocket(WS_URL);
+
+  const onFrame = useCallback(
+    (frameB64: string) => {
+      if (wsStatus === "open") {
+        send(JSON.stringify({ frame: frameB64 }));
+      }
+    },
+    [send, wsStatus]
+  );
+
+  useRPPG({ videoRef, onFrame, enabled: true });
+
+  const bpm = lastMessage?.bpm ?? 0;
+  const signal = lastMessage?.signal ?? [];
+  const rppgStatus = lastMessage?.status ?? "estimating";
+  const bbox = lastMessage?.bbox ?? null;
+  const ready = lastMessage?.ready ?? false;
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.tsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+    <div className={styles.app}>
+      <header className={styles.header}>
+        <span className={styles.title}>Willis Live</span>
+        <span
+          className={styles.wsIndicator}
+          data-status={wsStatus}
+          title={`WebSocket : ${wsStatus}`}
+        />
+      </header>
 
-      <div className="ticks"></div>
-
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
+      <main className={styles.grid}>
+        {/* Haut gauche — webcam */}
+        <div className={styles.cell}>
+          <WebcamPanel
+            videoRef={videoRef}
+            bbox={bbox}
+            status={rppgStatus}
+            ready={ready}
+          />
         </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
+        {/* Haut droite — SVG 2D */}
+        <div className={styles.cell}>
+          <Polygon2D bpm={bpm} status={rppgStatus} ready={ready} />
+        </div>
+
+        {/* Bas gauche — waveform */}
+        <div className={`${styles.cell} ${styles.cellShort}`}>
+          <WaveformPanel
+            signal={signal}
+            bpm={bpm}
+            status={rppgStatus}
+            ready={ready}
+          />
+        </div>
+
+        {/* Bas droite — modèle 3D */}
+        <div className={styles.cell}>
+          <Model3D bpm={bpm} status={rppgStatus} ready={ready} />
+        </div>
+      </main>
+    </div>
+  );
 }
-
-export default App
