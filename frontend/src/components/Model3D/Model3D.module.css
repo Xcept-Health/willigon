@@ -1,0 +1,26 @@
+.panel {
+  width: 100%;
+  height: 100%;
+  background: #050510;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.35s ease;
+}
+
+.beat {
+  transform: scale(1.03);
+  transition: none;
+}
+
+.label {
+  position: absolute;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.3);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  pointer-events: none;
+}
