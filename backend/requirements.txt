@@ -1,0 +1,9 @@
+fastapi>=0.111
+uvicorn[standard]>=0.29
+websockets>=12
+numpy>=1.26
+opencv-python-headless>=4.9
+cvzone>=1.6
+mediapipe>=0.10
+python-dotenv>=1.0
+pydantic>=2.0
