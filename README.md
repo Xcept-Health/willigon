@@ -263,10 +263,10 @@ The interface is divided into four independently resizable panels (drag the sepa
 
 | Position | Panel | Content |
 |---|---|---|
-| ↖ Top left | **Webcam** | Live video feed with face detection overlay and status badge |
-| ↗ Top right | **3D Model** | Interactive GLB model of the Circle of Willis  rotatable, zoomable |
-| ↙ Bottom left | **Waveform** | Real-time rPPG signal trace + BPM counter |
-| ↘ Bottom right | **2D Anatomy** | SVG anatomical diagram of the Circle of Willis, pulsing at measured BPM |
+| Top left | **Webcam** | Live video feed with face detection overlay and status badge |
+| Top right | **3D Model** | Interactive GLB model of the Circle of Willis  rotatable, zoomable |
+| Bottom left | **Waveform** | Real-time rPPG signal trace + BPM counter |
+| Bottom right | **2D Anatomy** | SVG anatomical diagram of the Circle of Willis, pulsing at measured BPM |
 
 ### Theme and controls
 
