@@ -26,7 +26,7 @@ from scipy.signal import butter, filtfilt
  
 #  APP
 
-app = FastAPI(title="Willis Live", version="0.1.0")
+app = FastAPI(title="Willigon", version="0.1.0")
 
 app.add_middleware(
     CORSMiddleware,
