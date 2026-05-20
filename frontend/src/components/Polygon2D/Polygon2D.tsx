@@ -95,7 +95,7 @@ export function Polygon2D({ bpm, status, ready }: Props) {
       </svg>
 
       <div className={styles.label}>
-        Polygone de Willis — 2D
+        2D
       </div>
     </div>
   );

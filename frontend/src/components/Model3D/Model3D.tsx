@@ -37,7 +37,7 @@ export function Model3D({ bpm, status, ready }: Props) {
         exposure="1.2"
         style={{ width: "100%", height: "100%", background: "transparent" }}
       />
-      <div className={styles.label}>Polygone de Willis — 3D</div>
+      <div className={styles.label}>3D</div>
     </div>
   );
 }

@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import type { Theme } from "../../App";
 import type { RPPGStatus } from "../../types/rppg";
 import styles from "./WaveformPanel.module.css";
 
@@ -7,19 +8,30 @@ interface Props {
   bpm: number;
   status: RPPGStatus;
   ready: boolean;
+  theme?: Theme;
 }
 
 const STATUS_COLOR: Record<RPPGStatus, string> = {
-  estimating: "#555",
-  no_face: "#ff4444",
-  normal: "#00ff88",
-  brady: "#ffcc00",
-  tachy: "#ffcc00",
-  critical_low: "#ff4444",
+  estimating:    "#555",
+  no_face:       "#ff4444",
+  normal:        "#00ff88",
+  brady:         "#ffcc00",
+  tachy:         "#ffcc00",
+  critical_low:  "#ff4444",
   critical_high: "#ff4444",
 };
 
-export function WaveformPanel({ signal, bpm, status, ready }: Props) {
+const STATUS_LABEL: Record<RPPGStatus, string> = {
+  estimating:    "Estimation…",
+  no_face:       "Pas de visage",
+  normal:        "Normal",
+  brady:         "Bradycardie",
+  tachy:         "Tachycardie",
+  critical_low:  "Critique bas",
+  critical_high: "Critique haut",
+};
+
+export function WaveformPanel({ signal, bpm, status, ready, theme = "dark" }: Props) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const bufferRef = useRef<number[]>([]);
 
@@ -42,11 +54,15 @@ export function WaveformPanel({ signal, bpm, status, ready }: Props) {
       const color = STATUS_COLOR[status];
       const buf = bufferRef.current;
 
-      ctx.fillStyle = "#050510";
+      // Fond adapté au thème
+      ctx.fillStyle = theme === "light" ? "#e8ecf4" : "#050510";
       ctx.fillRect(0, 0, W, H);
 
       // Grille légère
-      ctx.strokeStyle = "rgba(255,255,255,0.04)";
+      const gridColor = theme === "light"
+        ? "rgba(0,0,0,0.05)"
+        : "rgba(255,255,255,0.04)";
+      ctx.strokeStyle = gridColor;
       ctx.lineWidth = 1;
       for (let x = 0; x < W; x += 40) {
         ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke();
@@ -79,7 +95,7 @@ export function WaveformPanel({ signal, bpm, status, ready }: Props) {
 
     draw();
     return () => cancelAnimationFrame(raf);
-  }, [status]);
+  }, [status, theme]);
 
   return (
     <div className={styles.panel}>
@@ -95,13 +111,3 @@ export function WaveformPanel({ signal, bpm, status, ready }: Props) {
     </div>
   );
 }
-
-const STATUS_LABEL: Record<RPPGStatus, string> = {
-  estimating: "Estimation…",
-  no_face: "Pas de visage",
-  normal: "Normal",
-  brady: "Bradycardie",
-  tachy: "Tachycardie",
-  critical_low: "Critique bas",
-  critical_high: "Critique haut",
-};

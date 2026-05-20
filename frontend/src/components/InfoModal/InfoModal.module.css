@@ -1,0 +1,340 @@
+/* ─── Variables héritées du thème root ───────────────────────────── */
+[data-theme="dark"] {
+  --modal-bg:        #0c0d1e;
+  --modal-border:    rgba(255, 255, 255, 0.09);
+  --modal-text:      rgba(255, 255, 255, 0.82);
+  --modal-muted:     rgba(255, 255, 255, 0.4);
+  --modal-section:   rgba(255, 255, 255, 0.03);
+  --modal-icon-bg:   rgba(100, 120, 255, 0.12);
+  --modal-icon-clr:  rgba(130, 150, 255, 0.9);
+  --modal-step-bg:   rgba(255, 255, 255, 0.04);
+  --modal-tip-bg:    rgba(100, 180, 255, 0.07);
+  --modal-tip-brd:   rgba(100, 180, 255, 0.2);
+  --modal-card-bg:   rgba(255, 255, 255, 0.04);
+  --modal-tag-bg:    rgba(255, 255, 255, 0.07);
+  --modal-footer-bg: rgba(0, 0, 0, 0.3);
+  --overlay-bg:      rgba(2, 2, 14, 0.82);
+  --close-btn-bg:    rgba(255, 255, 255, 0.06);
+  --close-btn-hover: rgba(255, 255, 255, 0.12);
+}
+
+[data-theme="light"] {
+  --modal-bg:        #ffffff;
+  --modal-border:    rgba(0, 0, 0, 0.08);
+  --modal-text:      rgba(10, 12, 30, 0.85);
+  --modal-muted:     rgba(10, 12, 30, 0.42);
+  --modal-section:   rgba(0, 0, 0, 0.02);
+  --modal-icon-bg:   rgba(80, 100, 220, 0.08);
+  --modal-icon-clr:  rgba(80, 100, 220, 0.9);
+  --modal-step-bg:   rgba(0, 0, 0, 0.03);
+  --modal-tip-bg:    rgba(0, 120, 220, 0.05);
+  --modal-tip-brd:   rgba(0, 120, 220, 0.18);
+  --modal-card-bg:   rgba(0, 0, 0, 0.03);
+  --modal-tag-bg:    rgba(0, 0, 0, 0.07);
+  --modal-footer-bg: rgba(0, 0, 0, 0.04);
+  --overlay-bg:      rgba(10, 15, 40, 0.55);
+  --close-btn-bg:    rgba(0, 0, 0, 0.05);
+  --close-btn-hover: rgba(0, 0, 0, 0.1);
+}
+
+/* ─── Overlay ────────────────────────────────────────────────────── */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: var(--overlay-bg);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  animation: fadeIn 0.18s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* ─── Modal ──────────────────────────────────────────────────────── */
+.modal {
+  background: var(--modal-bg);
+  border: 1px solid var(--modal-border);
+  border-radius: 16px;
+  width: 100%;
+  max-width: 680px;
+  max-height: 88vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  color: var(--modal-text);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
+  animation: slideUp 0.22s cubic-bezier(0.34, 1.2, 0.64, 1);
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0)    scale(1); }
+}
+
+/* ─── Header ─────────────────────────────────────────────────────── */
+.modalHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 22px 24px 18px;
+  border-bottom: 1px solid var(--modal-border);
+  flex-shrink: 0;
+}
+
+.modalTitle {
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+  color: var(--modal-text);
+}
+
+.modalSubtitle {
+  font-size: 12px;
+  color: var(--modal-muted);
+  margin-top: 3px;
+}
+
+.closeBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  border: none;
+  background: var(--close-btn-bg);
+  color: var(--modal-text);
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.15s;
+}
+.closeBtn:hover { background: var(--close-btn-hover); }
+
+/* ─── Sections (scrollable) ──────────────────────────────────────── */
+.sections {
+  overflow-y: auto;
+  flex: 1;
+  padding: 8px 0;
+}
+
+.section {
+  display: flex;
+  gap: 16px;
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--modal-border);
+}
+.section:last-child { border-bottom: none; }
+
+.sectionIcon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: var(--modal-icon-bg);
+  color: var(--modal-icon-clr);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.sectionBody { flex: 1; min-width: 0; }
+
+.sectionTitle {
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  letter-spacing: -0.2px;
+}
+
+.sectionText {
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: var(--modal-text);
+  margin-bottom: 14px;
+}
+.sectionText strong { font-weight: 600; }
+
+/* ─── Steps ──────────────────────────────────────────────────────── */
+.steps {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+.step {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: var(--modal-step-bg);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.stepNum {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--modal-icon-bg);
+  color: var(--modal-icon-clr);
+  font-size: 11px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* ─── Tip ────────────────────────────────────────────────────────── */
+.tip {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: var(--modal-tip-bg);
+  border: 1px solid var(--modal-tip-brd);
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--modal-text);
+}
+.tipIcon { flex-shrink: 0; font-size: 14px; }
+
+/* ─── Artery cards ───────────────────────────────────────────────── */
+.arteryGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+@media (max-width: 500px) {
+  .arteryGrid { grid-template-columns: 1fr; }
+}
+
+.arteryCard {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px;
+  border-radius: 8px;
+  background: var(--modal-card-bg);
+  font-size: 12.5px;
+  line-height: 1.5;
+}
+.arteryCard strong { font-weight: 600; display: block; margin-bottom: 2px; }
+.arteryCard p { color: var(--modal-muted); margin: 0; }
+
+.arteryDot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  margin-top: 3px;
+}
+
+/* ─── Panel guide ────────────────────────────────────────────────── */
+.panelGuide {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+
+.panelItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.panelTag {
+  flex-shrink: 0;
+  padding: 2px 8px;
+  border-radius: 5px;
+  background: var(--modal-tag-bg);
+  font-size: 11.5px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  white-space: nowrap;
+  margin-top: 1px;
+}
+
+/* ─── Status guide ───────────────────────────────────────────────── */
+.statusGuide {
+  background: var(--modal-step-bg);
+  border-radius: 10px;
+  padding: 12px 14px;
+}
+
+.statusTitle {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--modal-muted);
+  margin-bottom: 10px;
+}
+
+.statusItems { display: flex; flex-direction: column; gap: 7px; }
+
+.statusRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12.5px;
+}
+
+.statusDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.statusDesc {
+  color: var(--modal-muted);
+  margin-left: 4px;
+}
+
+/* ─── Footer ─────────────────────────────────────────────────────── */
+.modalFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 24px;
+  border-top: 1px solid var(--modal-border);
+  background: var(--modal-footer-bg);
+  flex-shrink: 0;
+  gap: 12px;
+}
+
+.footerNote {
+  font-size: 11.5px;
+  color: var(--modal-muted);
+}
+
+.closeFooterBtn {
+  padding: 7px 18px;
+  border-radius: 8px;
+  border: 1px solid var(--modal-border);
+  background: var(--close-btn-bg);
+  color: var(--modal-text);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s;
+  white-space: nowrap;
+}
+.closeFooterBtn:hover { background: var(--close-btn-hover); }
